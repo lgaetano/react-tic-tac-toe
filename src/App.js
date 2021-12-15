@@ -27,7 +27,7 @@ const generateSquares = () => {
 
 const App = () => {
   // This starts state off as a 2D array of JS objects with
-  // empty value and unique ids.
+  // empty value and unique ids. 
   const [squares, setSquares] = useState(generateSquares());
 
   // Wave 2
