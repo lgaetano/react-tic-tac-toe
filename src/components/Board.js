@@ -14,7 +14,17 @@ const generateSquareComponents = (squares, onClickCallback) => {
       allSquares.push(row[i]);
     }
   });
-  return allSquares;
+  const squareComponents = allSquares.map((square) => {
+    return (
+      <Square
+        key={square.id}
+        value={square.value}
+        onClickCallback={onClickCallback}
+        id={square.id}
+      />
+    );
+  });
+  return <div className="grid">{squareComponents}</div>;
 };
 
 const Board = ({ squares, onClickCallback }) => {

@@ -35,6 +35,13 @@ const App = () => {
   //   When it is clicked on.
   //   Then pass it into the squares as a callback
 
+  const onClickCallback = (squareID) => {
+    const newSquares = [...squares];
+    newSquares[squareID.row][squareID.col].value = PLAYER_1;
+    setSquares(newSquares);
+    console.log(newSquares);
+  };
+
   const checkForWinner = () => {
     // Complete in Wave 3
     // You will need to:
@@ -59,7 +66,7 @@ const App = () => {
         <button>Reset Game</button>
       </header>
       <main>
-        <Board squares={squares} />
+        <Board squares={squares} onClickCallback={onClickCallback} />
       </main>
     </div>
   );
