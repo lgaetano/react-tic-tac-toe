@@ -10,18 +10,24 @@ const Square = (props) => {
   // const handleClick = () => {
   //   props.onClickCallback(props.id);
   // }
-  const doSomething = () => {
-    onClickCallback(props.id);
-    console.log('I did something');
-  };
-
+  // const doSomething = () => {
+  //   onClickCallback(props.id);
+  //   console.log('I did something');
+  // };
   return (
     // <button onClick={doSomething} className="square">
-    <button onClick={() => onClickCallback(props.id)} className="square">
+    <button
+      onClick={() => {
+        props.onClickCallback(props.id);
+        // console.log(props.key);
+        // console.log(props.id);
+        // console.log('I did something');
+        // console.log('the props:', props);
+      }}
+      className="square"
+    >
+      {/* this is what shows as the player on the board */}
       {props.value}
-      <div className="testing">
-        <p>{props.id}</p>
-      </div>
     </button>
   );
 };

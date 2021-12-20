@@ -37,12 +37,33 @@ const App = () => {
 
   const onClickCallback = (squareID) => {
     const newSquares = [...squares];
-    newSquares[squareID.row][squareID.col].value = PLAYER_1;
+    // console.log('new squares:', newSquares);
+    /*[[] [] []] */
+    newSquares.forEach((row) => {
+      row.forEach((square) => {
+        if (square.id === squareID) {
+          square.value = PLAYER_1;
+        }
+      });
+    });
     setSquares(newSquares);
-    console.log(newSquares);
+    // console.log('we made squares');
+    // console.log(newSquares);
+    // console.log(newSquares);
   };
 
-  const checkForWinner = () => {
+  const checkForWinner = (tic_dict) => {
+    // tic_dict = {
+    //   0: '',
+    //   1: '',
+    //   2: '',
+    //   3: '',
+    //   4: '',
+    //   5: '',
+    //   6: '',
+    //   7: '',
+    //   8: '',
+    // };
     // Complete in Wave 3
     // You will need to:
     // 1. Go accross each row to see if
@@ -52,6 +73,11 @@ const App = () => {
     //    3 squares in each column match
     // 3. Go across each diagonal to see if
     //    all three squares have the same value.
+    /* we need to update dict each click and then check 
+    
+    012, 345, 678 horizontal winners
+    036, 147, 258 vertical winners
+    048, 246 diagonal winners */
   };
 
   const resetGame = () => {
