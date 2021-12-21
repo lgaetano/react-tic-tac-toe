@@ -32,7 +32,6 @@ const Square = (props) => {
 };
 
 Square.propTypes = {
-  checkForWinner: PropTypes.func.isRequired,
   value: PropTypes.string.isRequired,
   onClickCallback: PropTypes.func.isRequired,
   id: PropTypes.number.isRequired,

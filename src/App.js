@@ -141,7 +141,7 @@ const App = () => {
         <Board
           squares={squares}
           onClickCallback={onClickCallback}
-          checkForWinner={checkForWinner}
+          // checkForWinner={checkForWinner}
         />
       </main>
     </div>

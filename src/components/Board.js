@@ -3,7 +3,7 @@ import './Board.css';
 import Square from './Square';
 import PropTypes from 'prop-types';
 
-const generateSquareComponents = (squares, onClickCallback, checkForWinner) => {
+const generateSquareComponents = (squares, onClickCallback) => {
   // Complete this for Wave 1
   // squares is a 2D Array, but
   //  you need to return a 1D array
@@ -24,7 +24,6 @@ const generateSquareComponents = (squares, onClickCallback, checkForWinner) => {
         value={square.value}
         onClickCallback={onClickCallback}
         id={square.id}
-        checkForWinner={checkForWinner}
       />
     );
   });
