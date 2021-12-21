@@ -19,11 +19,10 @@ const Square = (props) => {
     <button
       onClick={() => {
         props.onClickCallback(props.id);
-        // console.log(props.key);
-        // console.log(props.id);
-        // console.log('I did something');
-        // console.log('the props:', props);
       }}
+      // .then(() => {
+      //   props.checkForWinner();
+
       className="square"
     >
       {/* this is what shows as the player on the board */}
@@ -33,6 +32,7 @@ const Square = (props) => {
 };
 
 Square.propTypes = {
+  checkForWinner: PropTypes.func.isRequired,
   value: PropTypes.string.isRequired,
   onClickCallback: PropTypes.func.isRequired,
   id: PropTypes.number.isRequired,
