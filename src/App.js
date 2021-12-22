@@ -5,7 +5,6 @@ import Board from './components/Board';
 
 const PLAYER_1 = 'x';
 const PLAYER_2 = 'o';
-const ticDict = {};
 
 const generateSquares = () => {
   const squares = [];
@@ -18,6 +17,7 @@ const generateSquares = () => {
       squares[row].push({
         id: currentId,
         value: '',
+        disabled: false,
       });
       currentId += 1;
     }
@@ -27,10 +27,10 @@ const generateSquares = () => {
 };
 
 const App = () => {
-  // This starts state off as a 2D array of JS objects with
-  // empty value and unique ids.
   const [squares, setSquares] = useState(generateSquares());
+  const [ticDict, setTicDict] = useState({});
   const [turn, setTurn] = useState(PLAYER_1);
+  const [winner, setWinner] = useState(null);
   // Wave 2
   // You will need to create a method to change the square
   //   When it is clicked on.
@@ -48,8 +48,6 @@ const App = () => {
 
   const onClickCallback = (squareID) => {
     const newSquares = [...squares];
-    // console.log('new squares:', newSquares);
-    /*[[] [] []] */
     newSquares.forEach((row) => {
       row.forEach((square) => {
         if (square.id === squareID && square.value === '') {
@@ -61,17 +59,17 @@ const App = () => {
     setSquares(newSquares);
     toggleTurn();
 
-    checkForWinner();
-
-    // useEffect(() => {
-    //   // Logic
-    //   checkForWinner();
-    // }, []);
-
-    // console.log(ticDict);
-    // console.log('we made squares');
-    // console.log(newSquares);
-    // console.log(newSquares);
+    let someoneWon = checkForWinner();
+    if (someoneWon) {
+      setWinner(someoneWon);
+      squares.forEach((row) => {
+        row.map((square) => {
+          if (square.value == '') {
+            square.disabled = true;
+          }
+        });
+      });
+    }
   };
 
   const checkForWinner = () => {
@@ -89,17 +87,7 @@ const App = () => {
     012, 345, 678 horizontal winners
     036, 147, 258 vertical winners
     048, 246 diagonal winners */
-    // const row1 = [ticDict[0], ticDict[1], ticDict[2]];
-    // const row2 = [ticDict[3], ticDict[4], ticDict[5]];
-    // const row3 = [ticDict[6], ticDict[7], ticDict[8]];
-    // const col1 = [ticDict[0], ticDict[3], ticDict[6]];
-    // const col2 = [ticDict[1], ticDict[4], ticDict[7]];
-    // const col3 = [ticDict[2], ticDict[5], ticDict[8]];
-    // const diag1 = [ticDict[0], ticDict[4], ticDict[8]];
-    // const diag2 = [ticDict[2], ticDict[4], ticDict[6]];
 
-    //TODO: ASK ABOUT WA-HI this DOESN"T WORK
-    // if (ticDict[0] == ticDict[1] && ticDict[1] == ticDict[2]) 
     let winner = null;
     if (ticDict[0] == ticDict[1] && ticDict[1] == ticDict[2]) {
       winner = ticDict[0];
@@ -120,28 +108,27 @@ const App = () => {
     } else if (Object.keys(ticDict).length === 9) {
       winner = 'tie';
     }
-    
     return winner;
-    // console.log({winner});
   };
 
   const resetGame = () => {
+    setTicDict({});
     setSquares(generateSquares());
     setTurn(PLAYER_1);
+    setWinner(null);
   };
 
   return (
     <div className="App">
       <header className="App-header">
         <h1>React Tic Tac Toe</h1>
-        <h2>Winner is {checkForWinner()}</h2>
+        <h2>Winner is {winner}</h2>
         <button onClick={resetGame}>Reset Game</button>
       </header>
       <main>
         <Board
           squares={squares}
           onClickCallback={onClickCallback}
-          checkForWinner={checkForWinner}
         />
       </main>
     </div>
