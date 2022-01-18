@@ -1,10 +1,23 @@
 import React, { useState } from 'react';
 import './App.css';
-
 import Board from './components/Board';
 
 const PLAYER_1 = 'x';
 const PLAYER_2 = 'o';
+
+const WINFORMATIONS = [
+  // Rows
+  [[0,0], [0,1], [0,2]],
+  [[1,0], [1,1], [1,2]],
+  [[2,0], [2,1], [2,2]],
+  // Cols
+  [[0,0], [1,0], [2,0]],
+  [[0,1], [1,1], [2,1]],
+  [[0,2], [1,2], [2,2]],
+  // Diagonals
+  [[0,0], [1,1], [2,2]],
+  [[0,2], [1,1], [2,0]],
+];
 
 const generateSquares = () => {
   const squares = [];
@@ -22,21 +35,16 @@ const generateSquares = () => {
       currentId += 1;
     }
   }
-
   return squares;
 };
 
 const App = () => {
   const [squares, setSquares] = useState(generateSquares());
-  const [ticDict, setTicDict] = useState({});
   const [turn, setTurn] = useState(PLAYER_1);
   const [winner, setWinner] = useState(null);
-  // Wave 2
-  // You will need to create a method to change the square
-  //   When it is clicked on.
-  //   Then pass it into the squares as a callback
 
-  const toggleTurn = () => {
+  // Toggles turn between player 'x' and 'o'
+  const togglePlayerTurn = () => {
     let newTurn = '';
     if (turn === PLAYER_1) {
       newTurn = PLAYER_2;
@@ -46,22 +54,23 @@ const App = () => {
     setTurn(newTurn);
   };
 
-  const onClickCallback = (squareID) => {
+  const onClickCallback = (squareId) => {
     const newSquares = [...squares];
     newSquares.forEach((row) => {
       row.forEach((square) => {
-        if (square.id === squareID && square.value === '') {
+        if (square.id === squareId && square.value === '') {
           square.value = turn;
-          ticDict[squareID] = turn;
         }
       });
     });
     setSquares(newSquares);
-    toggleTurn();
+    setWinner(checkForWinner());
+    togglePlayerTurn();
 
     let someoneWon = checkForWinner();
     if (someoneWon) {
       setWinner(someoneWon);
+      // If winner, disable all squares
       squares.forEach((row) => {
         row.map((square) => {
           if (square.value == '') {
@@ -72,47 +81,37 @@ const App = () => {
     }
   };
 
-  const checkForWinner = () => {
-    // Complete in Wave 3
-    // You will need to:
-    // 1. Go across each row to see if
-    //    3 squares in the same row match
-    //    i.e. same value
-    // 2. Go down each column to see if
-    //    3 squares in each column match
-    // 3. Go across each diagonal to see if
-    //    all three squares have the same value.
-    /* we need to update dict each click and then check 
-    
-    012, 345, 678 horizontal winners
-    036, 147, 258 vertical winners
-    048, 246 diagonal winners */
-
+  // Checks current board for a winner
+  const checkForWinner = () => {  
     let winner = null;
-    if (ticDict[0] == ticDict[1] && ticDict[1] == ticDict[2]) {
-      winner = ticDict[0];
-    } else if (ticDict[3] == ticDict[4] && ticDict[4] == ticDict[5]) {
-      winner = ticDict[3];
-    } else if (ticDict[6] == ticDict[7] && ticDict[6] == ticDict[8]) {
-      winner = ticDict[6];
-    } else if (ticDict[0] == ticDict[3] && ticDict[3] == ticDict[6]) {
-      winner = ticDict[0];
-    } else if (ticDict[1] == ticDict[4] && ticDict[4] == ticDict[7]) {
-      winner = ticDict[1];
-    } else if (ticDict[2] == ticDict[5] && ticDict[5] == ticDict[8]) {
-      winner = ticDict[2];
-    } else if (ticDict[0] == ticDict[4] && ticDict[4] == ticDict[8]) {
-      winner = ticDict[0];
-    } else if (ticDict[2] == ticDict[4] && ticDict[4] == ticDict[6]) {
-      winner = ticDict[2];
-    } else if (Object.keys(ticDict).length === 9) {
-      winner = 'tie';
+
+    // Examine each winning formation as it applys to current board
+    for (let win of WINFORMATIONS) {
+      let current = new Set();
+      // Create a winning formation set from reference indicies 
+      for (let idx of win) {
+        current.add(squares[idx[0]][idx[1]].value);
+      }
+      // If set contains one type, that is not '', we have a winner
+      if (current.size == 1 && current.values().next().value != '') {
+        winner = current.values().next().value;
+      }
     }
-    return winner;
+    // If board has '', game in progress
+    for (let row of squares) {
+      for (let col of row) {
+        if (col.value == '') {
+          return winner;
+        }
+      }
+    }
+    
+    // If no '' present and no winner, game is tie
+    return 'tie';
   };
 
+
   const resetGame = () => {
-    setTicDict({});
     setSquares(generateSquares());
     setTurn(PLAYER_1);
     setWinner(null);
