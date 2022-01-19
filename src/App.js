@@ -20,6 +20,7 @@ const WINFORMATIONS = [
 ];
 
 const generateSquares = () => {
+  // Creates array of current squares
   const squares = [];
 
   let currentId = 0;
@@ -43,8 +44,8 @@ const App = () => {
   const [turn, setTurn] = useState(PLAYER_1);
   const [winner, setWinner] = useState(null);
 
-  // Toggles turn between player 'x' and 'o'
   const togglePlayerTurn = () => {
+    // Toggles turn between player 'x' and 'o'
     let newTurn = '';
     if (turn === PLAYER_1) {
       newTurn = PLAYER_2;
@@ -55,6 +56,7 @@ const App = () => {
   };
 
   const onClickCallback = (squareId) => {
+    // Updates squares state with latest action
     const newSquares = [...squares];
     newSquares.forEach((row) => {
       row.forEach((square) => {
@@ -81,8 +83,8 @@ const App = () => {
     }
   };
 
-  // Checks current board for a winner
   const checkForWinner = () => {  
+    // Checks current board for a winner
     let winner = null;
 
     // Examine each winning formation as it applys to current board
@@ -112,6 +114,7 @@ const App = () => {
 
 
   const resetGame = () => {
+    // Clears board for new game
     setSquares(generateSquares());
     setTurn(PLAYER_1);
     setWinner(null);
@@ -122,7 +125,7 @@ const App = () => {
       <header className="App-header">
         <h1>React Tic Tac Toe</h1>
         <h2>Winner is {winner}</h2>
-        <button onClick={resetGame}>Reset Game</button>
+        <button className='reset' onClick={resetGame}>Reset Game</button>
       </header>
       <main>
         <Board
